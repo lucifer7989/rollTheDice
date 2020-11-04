@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!---------- Dhaval Patel 000741985------>
+    <title></title>
+    <meta charset="utf-8" />
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AiJe5h9_WGxaZZgmLmr1QU31ZFnvracrMwt7eT3x3J0NE91pP_tGBwzIBuPNYHu9' async defer></script>
+
+    <script type='text/javascript'>
+    var map, infobox;
+    var tooltipTemplate = '<div style="background-color:white;height:20px;width:150px;padding:5px;text-align:center"><b>{title}</b></div>';
+	var listRecs = 
+{"name":"Webster's Falls","community":"Flamborough","height":"22","width":"30","longitude":"-79.98091776","latitude":"43.27617096"},
+{"name":"Baby Webster's","community":"Flamborough","height":"9","width":"3","longitude":"-79.98189946","latitude":"43.27568445"},
+{"name":"Dundas Falls","community":"Dundas","height":"6.4","width":"6.7","longitude":"-79.97215887","latitude":"43.27304004"},
+{"name":"Mill Falls","community":"Ancaster","height":"7","width":"4","longitude":"-79.97389756","latitude":"43.23335437"},
+{"name":"Sherman Falls","community":"Ancaster","height":"17","width":"8","longitude":"-79.97293085","latitude":"43.23811814"},
+{"name":"Tiffany Falls","community":"Ancaster","height":"21","width":"6","longitude":"-79.95811365","latitude":"43.23816424"},
+{"name":"Princess Falls","community":"Hamilton","height":"7","width":"2","longitude":"-79.929923","latitude":"43.24583705"},
+{"name":"Chedoke Falls","community":"Hamilton","height":"18","width":"9","longitude":"-79.90065606","latitude":"43.24172355"},
+{"name":"Upper Glendale Falls,"community":"Hamilton","height":"3","width":"3","longitude":"-79.80966287","latitude":"43.20227306"},
+{"name":"Buttermilk Falls","community":"Hamilton","height":"23","width":"8","longitude":"-79.81957437","latitude":"43.20532028"},
+{"name":"Little Davis Falls","community":"Hamilton","height":"3","width":"8","longitude":"-79.78891992","latitude":"43.20674674"},
+{"name":"Felker's Falls","community":"Hamilton","height":"22","width":"6","longitude":"-79.79015317","latitude":"43.20351812"},
+{"name":"Billy Green Falls","community":"Stoney Creek","height":"17","width":"6","longitude":"-79.76656783","latitude":"43.20722828"},
+{"name":"Harvey Falls","community":"Stoney Creek","height":"16","width":"3","longitude":"-79.65919249","latitude":"43.20029313"},
+{"name":"Promontory Falls","community":"Stoney Creek","height":"18","width":"1","longitude":"-79.65216768","latitude":"43.19846368"},
+{"name":"Rock Chapel Falls","community":"Flamborough","height":"8","width":"1.5","longitude":"-79.93659946","latitude":"43.29112026"},
+{"name":"Dyment Falls","community":"Flamborough","height":"15.7","width":"4","longitude":"-79.949149","latitude":"43.27818867"},
+{"name":"East Iroquoia Falls","community":"Hamilton","height":"20","width":"1.2","longitude":"-79.93857606","latitude":"43.24478309"},
+{"name":"Auchmar Falls","community":"Hamilton","height":"12","width":"1.5","longitude":"-79.89116304","latitude":"43.24357691"},
+{"name":"Lewis Rd. West Falls","community":"Stoney Creek","height":"9","width":"3","longitude":"-79.66581823","latitude":"43.20068576"},
+{"name":"Beckett Falls","community":"Hamilton","height":"3","width":"1.2","longitude":"-79.88584309","latitude":"43.2448669"},
+{"name":"East of Fifty Falls","community":"Stoney Creek","height":"10","width":"1.5","longitude":"-79.64141506","latitude":"43.19492372"},
+{"name":"Heritage Green Falls","community":"Hamilton","height":"12.2","width":"1.8","longitude":"-79.78751974","latitude":"43.20472388"},
+{"name":"Mountain Spring Falls","community":"Hamilton","height":"15","width":"2.4","longitude":"-79.78795476","latitude":"43.20451238"},
+{"name":"Valley Falls","community":"Flamborough","height":"4.3","width":"4.3","longitude":"-79.92825322","latitude":"43.2974896"},
+{"name":"Pritchard Falls","community":"Hamilton","height":"4.5","width":"1","longitude":"-79.81633222","latitude":"43.20110862"},
+{"name":"Broman Falls","community":"Hamilton","height":"7","width":"1.1","longitude":"-79.81600432","latitude":"43.214243"},
+{"name":"Baby Albion Falls","community":"Hamilton","height":"8.5","width":"1","longitude":"-79.81966153","latitude":"43.20016152"},
+{"name":"Lower Punchbowl Falls","community":"Stoney Creek","height":"6","width":"6","longitude":"-79.75716844","latitude":"43.21120564"},
+{"name":"Devil's Punchbowl Falls","community":"Stoney Creek","height":"37","width":"3","longitude":"-79.75590561","latitude":"43.21034548"},
+{"name":"West Iroquoia Falls","community":"Hamilton","height":"19.8","width":"1","longitude":"-79.94049199","latitude":"43.24439565"},
+{"name":"Sugar Shack Falls","community":"Dundas","height":"9","width":"4","longitude":"-79.93754073","latitude":"43.28449266"},
+{"name":"Progreston Falls","community":"Flamborough","height":"6.7","width":"16.5","longitude":"-79.95992137","latitude":"43.39810058"},
+{"name":"Great Falls","community":"Flamborough","height":"10","width":"5","longitude":"-79.88723848","latitude":"43.33054059"},
+{"name":"Borer's Falls","community":"Flamborough","height":"15","width":"5","longitude":"-79.93678673","latitude":"43.29381436"},
+{"name":"Lower Sydenham Falls","community":"Dundas","height":"4","width":"4","longitude":"-79.95835345","latitude":"43.27395968"},
+{"name":"Tew's Falls","community":"Flamborough","height":"41","width":"9","longitude":"-79.97826607","latitude":"43.28071262"}
+];
+    
+function GetMap() {
+        map = new Microsoft.Maps.Map('#myMap', {});
+                
+        //Create an infobox for displaying detailed information.
+        infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+            visible: false
+        });
+        infobox.setMap(map);
+                
+        for (var i = 0; i < listRecs.length; i++) {
+            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(listRecs[i].latitude,listRecs[i].longtitude));
+            //Store some metadata with the pushpin.
+            pushpin.metadata = {
+                title: listRecs[i].name ,
+                description: listRecs[i].address + " " + listRecs[i].city
+            };
+            //Add a eventHandler to the pushpin.
+            Microsoft.Maps.Events.addHandler(pushpin, 'click', pushpinInfo);
+            //Add pushpin to the map.
+            map.entities.push(pushpin);
+        }
+    }
+    function pushpinInfo(e) {
+                
+        //Make sure the infobox has metadata to display.
+        if (e.target.metadata) {
+            //Set the infobox options with the pushpin's metadata.
+            infobox.setOptions({
+                location: e.target.getLocation(),
+                title: e.target.metadata.title,
+                description: e.target.metadata.description,
+                visible: true
+            });
+        }
+    }
+        </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AiJe5h9_WGxaZZgmLmr1QU31ZFnvracrMwt7eT3x3J0NE91pP_tGBwzIBuPNYHu9' async defer></script>
+</head>
+<body>
+    <div id="myMap" style="position:relative;width:800px;height:600px;"></div>
+</body>
+</html>
