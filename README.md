@@ -1,2 +1,3 @@
 # rollTheDice
-Roll the dice game
+Roll the dice game with two players
+
